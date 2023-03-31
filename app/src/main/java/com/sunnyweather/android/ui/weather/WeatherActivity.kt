@@ -50,9 +50,24 @@ class WeatherActivity : AppCompatActivity() {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
+            WeatherBinding.swipeRefresh.isRefreshing = false
         })
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        //设置下拉刷新进度条的颜色
+        WeatherBinding.swipeRefresh.setColorSchemeResources(com.google.android.material.R.color.design_default_color_primary)
+        refreshWeather()
+        //设置下拉刷新监听器,当触发监听器时 就在监听器中回调refreshWeather()方法来刷新天气信息
+        WeatherBinding.swipeRefresh.setOnRefreshListener { refreshWeather() }
+
+
+
     }
+
+    //刷新天气信息
+    fun refreshWeather(){
+        viewModel.refreshWeather(viewModel.locationLng,viewModel.locationLat)
+        WeatherBinding.swipeRefresh.isRefreshing = true//让下拉进度条显示出来
+    }
+
     //  WeatherBinding.forecastInclude
     //  WeatherBinding.lifeIndexInclude
     //  WeatherBinding.nowInclude
