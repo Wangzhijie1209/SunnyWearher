@@ -1,5 +1,6 @@
 package com.sunnyweather.android.ui.place
 
+import android.app.assist.AssistStructure.ViewNode
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sunnyweather.android.MainActivity
 import com.sunnyweather.android.R
 import com.sunnyweather.android.databinding.FragmentPlaceBinding
 import com.sunnyweather.android.ui.weather.WeatherActivity
@@ -40,7 +42,8 @@ class PlaceFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(viewModel.isPlaceSaved()){
+        //当PlaceFragment被嵌入MainActivity中,并且之前已经存在选中的城市,此时才会直接跳转到WeatherActivity
+        if(activity is MainActivity && viewModel.isPlaceSaved()){
             val place = viewModel.getSavePlace()
             val intent = Intent(context,WeatherActivity::class.java).apply {
                 putExtra("location_lng",place.location.lng)
